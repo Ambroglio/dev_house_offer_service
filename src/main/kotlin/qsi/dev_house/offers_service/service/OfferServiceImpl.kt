@@ -4,11 +4,18 @@ import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
+import qsi.dev_house.offers_service.misc.OfferRanker
 import qsi.dev_house.offers_service.model.Company
 import qsi.dev_house.offers_service.model.Offer
 import qsi.dev_house.offers_service.persistence.CompanyRepository
 import qsi.dev_house.offers_service.persistence.OfferRepository
+import java.time.Duration
+import java.time.Period
+import java.time.ZoneId
+import java.time.temporal.ChronoUnit
 import java.util.*
+import java.util.stream.Collectors
+import java.util.stream.StreamSupport
 import javax.transaction.Transactional
 
 @Service
@@ -18,6 +25,9 @@ class OfferServiceImpl : OfferService {
 
     @Autowired
     val companyRepository: CompanyRepository? = null
+
+    @Autowired
+    val offerRanker: OfferRanker? = null
 
     var logger: Logger = LoggerFactory.getLogger(OfferServiceImpl::class.java)
 
@@ -72,6 +82,30 @@ class OfferServiceImpl : OfferService {
         offer.valid = false
 
         offerRepository!!.save(offer)
+    }
+
+    override fun findOffers(): List<Offer> {
+        val offers: List<Offer> =
+            StreamSupport.stream(offerRepository!!.findByValidTrueAndValidityEndDateAfter().spliterator(), false)
+                .collect(Collectors.toList())
+
+        return offerRanker!!.sortByRanking(offers)
+    }
+
+    override fun findByMemberId(id: UUID) : List<Offer> {
+        return StreamSupport.stream(
+            offerRepository!!.findByMemberIdAndValidTrueAndValidityEndDateAfter(id).spliterator(), false)
+            .collect(Collectors.toList())
+    }
+
+    override fun findByCityNameStartingWith(cityNamePart: String) : List<Offer> {
+        val cityNamePartToUpperCase = cityNamePart.toUpperCase()
+
+        val offers: List<Offer> =
+            StreamSupport.stream(offerRepository!!.findByCityNameStartsWithAndValidTrueAndValidityEndDateAfter(cityNamePartToUpperCase).spliterator(), false)
+                .collect(Collectors.toList())
+
+        return offerRanker!!.sortByRanking(offers)
     }
 
 

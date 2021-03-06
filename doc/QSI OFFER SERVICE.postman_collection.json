@@ -1,0 +1,256 @@
+{
+	"info": {
+		"_postman_id": "8f361c8c-31dc-4666-adba-09b88bc269fe",
+		"name": "QSI OFFER SERVICE",
+		"description": "This is a Postman collection to test Offer Service.",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "companies",
+			"item": [
+				{
+					"name": "Get companies",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8099/companies/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8099",
+							"path": [
+								"companies",
+								""
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "offers",
+			"item": [
+				{
+					"name": "Create Offer",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = JSON.parse(responseBody)",
+									"postman.setEnvironmentVariable(\"id\", jsonData.id)",
+									"postman.setEnvironmentVariable(\"memberId\", jsonData.memberId)"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJlMzUwZDU5Yi1lNmUxLTRmMWQtYmY5Yy1hNTFmYTg2ZDAyYmMiLCJpc3MiOiJhdXRoLm1pYWdlLnJvY2tzIiwiaWF0IjoiMTYxNDg5MTU5MSIsImV4cCI6IjE2MTUxNTA3OTEifQ.YTY5CaIPJTwPhArZDBjRjtuhEh72Re1nGGja7ygustwC_KqUzfJavyIevLSJNsVPAEOxrDstuMm8vVt2LsxP3A",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"cityName\": \"Lille\",\n    \"longitude\" : 0.0,\n    \"latitude\": 0.0,\n    \"title\" : \"Recherche de Développeur React + REDUX\",\n    \"description\": \"A la recherche d'un développeur React + REDUX, nos locaux sont tout prêts pour vous ! Nous avons de nombreux avantages, tels que [...].\",\n    \"companyName\": \"Leroy Merlin\",\n    \"companyDescription\": \"Adeo est le leader européen du DIY et [...].\",\n    \"validityEndDate\": \"2021-06-25\",\n    \"contractTypeValue\": \"CDI\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8099/offers/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8099",
+							"path": [
+								"offers",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Offer",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"cityName\": \"Le Touquet Paris-Plage\",\n    \"longitude\" : 330.21,\n    \"latitude\": 22.0,\n    \"title\" : \"Recherche de Développeur React + REDUX\",\n    \"description\": \"A la recherche d'un développeur React + REDUX, nos locaux sont tout prêts pour vous ! Nous avons de nombreux avantages, tels que [...].\",\n    \"companyName\": \"Leroy Merlin\",\n    \"companyDescription\": \"Leroy Merlin, et vos envies prennent vie !\",\n    \"validityEndDate\": \"2019-10-21\",\n    \"contractTypeValue\": \"CDI\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8099/offers/{{id}}",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8099",
+							"path": [
+								"offers",
+								"{{id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Offer",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8099/offers/{{id}}",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8099",
+							"path": [
+								"offers",
+								"{{id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Remove Offer",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8099/offers/{{id}}",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8099",
+							"path": [
+								"offers",
+								"{{id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Offers",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8099/offers/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8099",
+							"path": [
+								"offers",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Offer by Member Id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8099/offers/member/{{memberId}}",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8099",
+							"path": [
+								"offers",
+								"member",
+								"{{memberId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Offers by City Name Part",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8099/offers/city/li",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8099",
+							"path": [
+								"offers",
+								"city",
+								"li"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJlMzUwZDU5Yi1lNmUxLTRmMWQtYmY5Yy1hNTFmYTg2ZDAyYmMiLCJpc3MiOiJhdXRoLm1pYWdlLnJvY2tzIiwiaWF0IjoiMTYxNDg5MTU5MSIsImV4cCI6IjE2MTUxNTA3OTEifQ.YTY5CaIPJTwPhArZDBjRjtuhEh72Re1nGGja7ygustwC_KqUzfJavyIevLSJNsVPAEOxrDstuMm8vVt2LsxP3A",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	]
+}

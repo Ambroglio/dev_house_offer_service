@@ -10,6 +10,11 @@ interface OfferService {
     fun findById(id : UUID) : Offer
     fun updateOffer(id: UUID, offer: Offer) : Offer
     fun deleteOffer(id: UUID)
+    fun findByMemberId(id: UUID) : List<Offer>
+    fun findByCityNameStartingWith(cityNamePart: String) : List<Offer>
+
+    //find all valid offers globally - to be sorted then
+    fun findOffers() : List<Offer>
 
     //WARNING ONLY FOR TESTS
     fun deleteAll()

@@ -6,5 +6,9 @@ import qsi.dev_house.offers_service.model.Offer
 import java.util.*
 
 @Repository interface OfferRepository : CrudRepository<Offer, UUID> {
-
+    fun findByValidTrueAndValidityEndDateAfter(date: Date = Date()) : Iterable<Offer>
+    fun countByValidTrueAndValidityEndDateAfterAndCityNameEquals(date: Date = Date(), cityName : String) : Int
+    fun countByValidTrueAndValidityEndDateAfterAndCompany_NameEquals(date: Date = Date(), companyName : String) : Int
+    fun findByMemberIdAndValidTrueAndValidityEndDateAfter(id : UUID, date: Date = Date()) : Iterable<Offer>
+    fun findByCityNameStartsWithAndValidTrueAndValidityEndDateAfter(cityNamePart: String, date : Date = Date()) : Iterable<Offer>
 }

@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpEntity
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
-import org.springframework.stereotype.Controller
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.client.RestTemplate
 import qsi.dev_house.offers_service.model.Offer
@@ -23,7 +22,6 @@ import java.util.*
  */
 @RestController
 @RequestMapping("/offers")
-@JsonView(Views.Normal::class)
 class OfferController {
     data class VerifyTokenRequest(
             val jwt: String
@@ -62,6 +60,20 @@ class OfferController {
         return responseEntity.body!!.user_id
     }
 
+    @GetMapping("/")
+    @JsonView(Views.Offer::class)
+    fun getOffers() : List<Offer> {
+        return offerService!!.findOffers()
+    }
+
+    @GetMapping("/{id}")
+    @JsonView(Views.Offer::class)
+    fun getOffer(
+        @PathVariable("id") id : UUID
+    ) : Offer {
+        return offerService!!.findById(id)
+    }
+
     /**
      * Creates an offer, checking if the token is verified in order to create the post for the current member.
      *
@@ -70,6 +82,7 @@ class OfferController {
      * @return offer created
      */
     @PostMapping("/")
+    @JsonView(Views.Offer::class)
     fun createOffer(@RequestBody offer: Offer,
                     @RequestHeader("Authorization") bearer: String): Offer {
         logger.debug(bearer)
@@ -87,6 +100,7 @@ class OfferController {
      * @param bearer containing jwt
      */
     @PutMapping("/{id}")
+    @JsonView(Views.Offer::class)
     fun updateOffer(
             @PathVariable("id") id : UUID,
             @RequestBody offer : Offer,
@@ -104,14 +118,8 @@ class OfferController {
         return offerService!!.updateOffer(id, offer)
     }
 
-    @GetMapping("/{id}")
-    fun getOffer(
-            @PathVariable("id") id : UUID
-    ) : Offer {
-        return offerService!!.findById(id)
-    }
-
     @DeleteMapping("/{id}")
+    @JsonView(Views.Offer::class)
     fun deleteOffer(
             @PathVariable("id") id : UUID,
             @RequestHeader("Authorization") bearer: String
@@ -124,5 +132,21 @@ class OfferController {
         }
 
         offerService!!.deleteOffer(id)
+    }
+
+    @GetMapping("/member/{id}")
+    @JsonView(Views.Offer::class)
+    fun findOffersByMemberId(
+        @PathVariable("id") id : UUID,
+    ) : List<Offer> {
+        return offerService!!.findByMemberId(id)
+    }
+
+    @GetMapping("/city/{cityName}")
+    @JsonView(Views.Offer::class)
+    fun findOffersByCityName(
+        @PathVariable("cityName") cityName : String
+    ) : List<Offer> {
+        return offerService!!.findByCityNameStartingWith(cityNamePart = cityName)
     }
 }
