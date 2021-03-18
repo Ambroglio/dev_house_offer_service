@@ -1,4 +1,8 @@
 package qsi.dev_house.offers_service.service
 
-class CityService {
+import org.springframework.stereotype.Service
+
+@Service
+interface CityService {
+    fun getCities(): List<String>
 }
