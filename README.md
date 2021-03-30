@@ -1,5 +1,7 @@
 # Offer Service
 
+COMPILES BUT DOES NOT WORK
+
 ## Presentation
 
 Offer services allows a registered member to create, update or delete (logically) a specific offer for Dev House. For creation and update, Authorization will be checked with JWT via Authentication/Identity Service.
@@ -23,5 +25,7 @@ The different environement variables to add are the following :
 On Unix, you can set up an environment variable by typing `export VARIABLE=VALUE`
 
 ## Development
+
+The sql script is located in the doc directory and has to be runned before.
 
 ### `mvn clean compile install spring-boot:run`
