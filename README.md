@@ -24,6 +24,10 @@ On Unix, you can set up an environment variable by typing `export VARIABLE=VALUE
 
 ## Development
 
+In postgres :
+### `CREATE DATABASE offers`
+
+In a terminal :
 ### `mvn clean compile install spring-boot:run`
 
 The main branch uses Spring MVC while the webflux branch uses Spring Webflux. However there are some issues with Spring Webflux so it doesn't work properly.
