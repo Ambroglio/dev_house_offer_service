@@ -43,10 +43,10 @@ class OfferServiceIntegrationTest {
         //given
         offer.companyDescription = "Adeo est un des leaders européens du DIY et de l'amélioration de l'habitat."
 
-        offer = offerService!!.createOffer(offer)
+        offer = offerService!!.createOffer(offer).block()!!
 
         //when
-        val foundOffer: Offer = offer.id!!.let { offerService.findById(it) }
+        val foundOffer: Offer = offer.id!!.let { offerService.findById(it).block()!! }
 
         //then
         Assertions.assertThat(foundOffer.company.offers.size)
@@ -67,21 +67,21 @@ class OfferServiceIntegrationTest {
         //we change the description in order to see if it has changed for the company
         otherOffer.companyDescription = "Adeo est le troisième leader mondial du DIY et de l'amélioration de l'habitat."
 
-        otherOffer = offerService.createOffer(otherOffer)
+        otherOffer = offerService.createOffer(otherOffer).block()!!
 
         //when
         val foundOtherOffer = otherOffer.id!!.let { offerService.findById(it) }
 
-        Assertions.assertThat(foundOtherOffer.title)
+        Assertions.assertThat(foundOtherOffer.block()!!.title)
                 .isEqualTo("DevOPS")
 
         //then
-        Assertions.assertThat(foundOtherOffer.company.offers.size)
+        Assertions.assertThat(foundOtherOffer.block()!!.company.offers.size)
                 .isEqualTo(2)
 
         println(foundOtherOffer)
 
-        Assertions.assertThat(foundOtherOffer.company.description)
+        Assertions.assertThat(foundOtherOffer.block()!!.company.description)
                 .isEqualTo("Adeo est le leader européen du DIY et de l'amélioration de l'habitat.")
     }
 }

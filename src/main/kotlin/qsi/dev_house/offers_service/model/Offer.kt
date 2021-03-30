@@ -1,14 +1,21 @@
 package qsi.dev_house.offers_service.model
 
 import com.fasterxml.jackson.annotation.JsonView
+import lombok.AllArgsConstructor
+import lombok.Data
+import lombok.NoArgsConstructor
+import org.springframework.data.annotation.Id
+import org.springframework.data.relational.core.mapping.Table
 import qsi.dev_house.offers_service.views.Views
 import java.time.Period
 import java.util.*
-import javax.persistence.*
 import kotlin.jvm.Transient
 
-@Entity
 //TODO validation ?
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@Table("offer")
 data class Offer(
         //city name is kept in order to find it easily through repositories
         @JsonView(Views.Offer::class, Views.Company::class)
@@ -44,7 +51,6 @@ data class Offer(
         var contractTypeValue: String,
 ) {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
     @JsonView(Views.Offer::class, Views.Company::class)
     var id: UUID? = null
     @JsonView(Views.Offer::class, Views.Company::class)
@@ -54,8 +60,6 @@ data class Offer(
         }
 
     //company is kept here
-    @ManyToOne(cascade = [CascadeType.ALL, CascadeType.MERGE], fetch = FetchType.EAGER)
-    @JoinColumn(name = "company_name", referencedColumnName = "name")
     @JsonView(Views.Offer::class)
     lateinit var company: Company
 

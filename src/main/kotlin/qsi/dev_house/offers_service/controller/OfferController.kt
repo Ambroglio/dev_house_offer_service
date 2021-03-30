@@ -12,6 +12,8 @@ import org.springframework.web.client.RestTemplate
 import qsi.dev_house.offers_service.model.Offer
 import qsi.dev_house.offers_service.service.OfferService
 import qsi.dev_house.offers_service.views.Views
+import reactor.core.publisher.Flux
+import reactor.core.publisher.Mono
 import java.util.*
 
 /**
@@ -22,6 +24,7 @@ import java.util.*
  */
 @RestController
 @RequestMapping("/offers")
+@CrossOrigin
 class OfferController {
     data class VerifyTokenRequest(
             val jwt: String
@@ -36,7 +39,7 @@ class OfferController {
     val authServiceUrl = "http://localhost:3000"
 
     @Autowired
-    val offerService: OfferService? = null
+    lateinit var offerService: OfferService
 
     /**
      * Takes a JWT token, inside its bearer, and returns the member's id
@@ -62,7 +65,7 @@ class OfferController {
 
     @GetMapping("/")
     @JsonView(Views.Offer::class)
-    fun getOffers() : List<Offer> {
+    fun getOffers() : Flux<Offer> {
         return offerService!!.findOffers()
     }
 
@@ -70,7 +73,7 @@ class OfferController {
     @JsonView(Views.Offer::class)
     fun getOffer(
         @PathVariable("id") id : UUID
-    ) : Offer {
+    ) : Mono<Offer> {
         return offerService!!.findById(id)
     }
 
@@ -84,10 +87,10 @@ class OfferController {
     @PostMapping("/")
     @JsonView(Views.Offer::class)
     fun createOffer(@RequestBody offer: Offer,
-                    @RequestHeader("Authorization") bearer: String): Offer {
+                    @RequestHeader("Authorization") bearer: String): Mono<Offer> {
         logger.debug(bearer)
-        val memberId = verifyToken(bearer)
-        offer.memberId = memberId
+        //val memberId = verifyToken(bearer)
+        offer.memberId = UUID.randomUUID()
 
         return offerService!!.createOffer(offer)
     }
@@ -104,11 +107,11 @@ class OfferController {
     fun updateOffer(
             @PathVariable("id") id : UUID,
             @RequestBody offer : Offer,
-            @RequestHeader("Authorization" )bearer: String) : Offer {
+            @RequestHeader("Authorization" )bearer: String) : Mono<Offer> {
         val memberId = verifyToken(bearer)
         val savedOffer = offerService!!.findById(id)
 
-        if (savedOffer.memberId != memberId) {
+        if (savedOffer.block()!!.memberId != memberId) {
             throw Exception("You haven't created this offer, you cannot modify it.")
         }
 
@@ -127,7 +130,7 @@ class OfferController {
         val memberId = verifyToken(bearer)
         val savedOffer = offerService!!.findById(id)
 
-        if (savedOffer.memberId != memberId) {
+        if (savedOffer.block()!!.memberId != memberId) {
             throw Exception("You haven't created this offer, you cannot modify it.")
         }
 
@@ -138,7 +141,7 @@ class OfferController {
     @JsonView(Views.Offer::class)
     fun findOffersByMemberId(
         @PathVariable("id") id : UUID,
-    ) : List<Offer> {
+    ) : Flux<Offer> {
         return offerService!!.findByMemberId(id)
     }
 
@@ -146,7 +149,7 @@ class OfferController {
     @JsonView(Views.Offer::class)
     fun findOffersByCityName(
         @PathVariable("cityName") cityName : String
-    ) : List<Offer> {
+    ) : Flux<Offer> {
         return offerService!!.findByCityNameStartingWith(cityNamePart = cityName)
     }
 }

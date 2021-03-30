@@ -51,22 +51,22 @@ class OfferRepositoryIntegrationTest {
         offerRepository!!.deleteAll()
     }
 
-    @Test
-    fun whenFindById_ThenReturnOffer() {
-        // given
-
-        offer = entityManager!!.persist(offer)
-        entityManager.flush()
-
-        // when
-        val foundOffer: Offer? = offer.id!!.let { offerRepository!!.findById(it).orElse(null) }
-
-        // then
-        assertThat(foundOffer).isNotNull
-
-        if (foundOffer != null) {
-            assertThat(foundOffer.cityName)
-                    .isEqualTo(offer.cityName)
-        }
-    }
+//    @Test
+//    fun whenFindById_ThenReturnOffer() {
+//        // given
+//
+//        offer = entityManager!!.persist(offer)
+//        entityManager.flush()
+//
+//        // when
+//        val foundOffer: Offer? = offer.id!!.let { offerRepository!!.findById(it).orElse(null) }
+//
+//        // then
+//        assertThat(foundOffer).isNotNull
+//
+//        if (foundOffer != null) {
+//            assertThat(foundOffer.cityName)
+//                    .isEqualTo(offer.cityName)
+//        }
+//    }
 }
